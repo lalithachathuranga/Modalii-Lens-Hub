@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modalii LensHub (PVT) Ltd | Clear Vision, Stylish Life</title>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-blue: #1a73e8; --deep-blue: #0d47a1; --soft-blue: #64b5f6;
+            --light-blue: #e3f2fd; --glass-bg: rgba(255,255,255,0.15);
+            --glass-border: rgba(255,255,255,0.25); --text-dark: #1a1a2e;
+            --shadow-soft: 0 8px 32px rgba(31,38,135,0.15);
+        }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e3f2fd 50%, #f0f4f8 100%);
+            color: var(--text-dark); overflow-x: hidden; line-height: 1.6;
+        }
+        @keyframes floatSlow {
+            0%,100% { transform: translateY(0) translateX(0); }
+            33% { transform: translateY(-15px) translateX(10px); }
+            66% { transform: translateY(10px) translateX(-5px); }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+        @keyframes pulse {
+            0%,100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+        }
+        @keyframes bounce {
+            0%,20%,50%,80%,100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+        @keyframes scrollWheel {
+            0% { opacity: 1; top: 6px; }
+            100% { opacity: 0; top: 20px; }
+        }
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+            padding: 1rem 2rem; background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
+            transition: all 0.4s ease;
+        }
+        .navbar.scrolled {
+            padding: 0.6rem 2rem; background: rgba(255,255,255,0.95);
+            box-shadow: var(--shadow-soft);
+        }
+        .nav-container {
+            max-width: 1400px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center;
+        }
+        .logo {
+            font-size: 1.5rem; font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-blue), var(--deep-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; display: flex; align-items: center; gap: 0.5rem;
+        }
+        .logo-icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--soft-blue));
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.2rem; animation: pulse 3s infinite ease-in-out;
+        }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            text-decoration: none; color: var(--text-dark); font-weight: 500;
+            font-size: 0.95rem; position: relative; padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--soft-blue));
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: var(--primary-blue); }
+        .nav-links a:hover::after { width: 100%; }
+        .mobile-menu-btn {
+            display: none; background: none; border: none;
+            font-size: 1.5rem; cursor: pointer; color: var(--primary-blue);
+        }
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 30%, #e8eaf6 70%, #f3e5f5 100%);
+            background-size: 400% 400%; animation: gradientShift 15s ease infinite;
+        }
+        .hero-particles {
+            position: absolute; width: 100%; height: 100%;
+            overflow: hidden; pointer-events: none;
+        }
+        .particle {
+            position: absolute; border-radius: 50%;
+            background: rgba(26,115,232,0.15); animation: particleFloat linear infinite;
+        }
+        .floating-lens {
+            position: absolute; border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(100,181,246,0.2));
+            backdrop-filter: blur(2px); border: 2px solid rgba(255,255,255,0.5);
+            box-shadow: 0 8px 32px rgba(31,38,135,0.1); animation: floatSlow ease-in-out infinite;
+        }
+        .floating-lens::before {
+            content: ''; position: absolute; top: 20%; left: 20%;
+            width: 30%; height: 30%; border-radius: 50%;
+            background: rgba(255,255,255,0.6); filter: blur(2px);
+        }
+        .hero-content { text-align: center; z-index: 10; padding: 2rem; max-width: 900px; }
+        .hero-badge {
+            display: inline-block; padding: 0.5rem 1.5rem;
+            background: var(--glass-bg); backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); border-radius: 50px;
+            font-size: 0.9rem; color: var(--primary-blue); margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800; line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--deep-blue), var(--primary-blue), var(--soft-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+        .hero-tagline {
+            font-size: clamp(1.2rem, 3vw, 1.8rem); color: #555;
+            margin-bottom: 3rem; font-weight: 300;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+        .hero-cta {
+            display: inline-flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+            animation: fadeInUp 1s ease-out 0.8s both;
+        }
+        .btn {
+            padding: 1rem 2.5rem; border-radius: 50px; font-size: 1rem; font-weight: 600;
+            text-decoration: none; transition: all 0.4s ease; cursor: pointer;
+            border: none; position: relative; overflow: hidden;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--deep-blue));
+            color: white; box-shadow: 0 4px 15px rgba(26,115,232,0.3);
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(26,115,232,0.5); }
+        .btn-primary::before {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .btn-primary:hover::before { left: 100%; }
+        .btn-secondary {
+            background: transparent; color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+        .btn-secondary:hover {
+            background: var(--primary-blue); color: white;
+            transform: translateY(-3px); box-shadow: 0 8px 25px rgba(26,115,232,0.3);
+        }
+        .scroll-indicator {
+            position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+        .scroll-indicator span {
+            display: block; width: 24px; height: 40px;
+            border: 2px solid var(--primary-blue); border-radius: 12px; position: relative;
+        }
+        .scroll-indicator span::before {
+            content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+            width: 4px; height: 8px; background: var(--primary-blue); border-radius: 2px;
+            animation: scrollWheel 2s infinite;
+        }
+        section { padding: 6rem 2rem; position: relative; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-label {
+            display: inline-block; padding: 0.4rem 1.2rem;
+            background: linear-gradient(135deg, var(--light-blue), rgba(100,181,246,0.2));
+            color: var(--primary-blue); border-radius: 50px; font-size: 0.85rem;
+            font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;
+        }
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; color: var(--text-dark);
+            margin-bottom: 1rem; position: relative; display: inline-block;
+        }
+        .section-title::after {
+            content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+            width: 60px; height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--soft-blue)); border-radius: 2px;
+        }
+        .section-subtitle { font-size: 1.1rem; color: #666; max-width: 600px; margin: 1.5rem auto 0; }
+        .about { background: linear-gradient(180deg, #f5f7fa 0%, #ffffff 100%); }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .about-image { position: relative; }
+        .about-image-main {
+            width: 100%; border-radius: 20px; box-shadow: var(--shadow-soft);
+            transition: transform 0.5s ease;
+        }
+        .about-image:hover .about-image-main { transform: scale(1.02); }
+        .about-image::before {
+            content: ''; position: absolute; top: -20px; left: -20px;
+            width: 100%; height: 100%; border: 3px solid var(--soft-blue);
+            border-radius: 20px; z-index: -1; opacity: 0.5;
+        }
+        .about-content h3 { font-size: 2rem; margin-bottom: 1.5rem; color: var(--deep-blue); }
+        .about-content p { font-size: 1.05rem; color: #555; margin-bottom: 1.5rem; line-height: 1.8; }
+        .about-stats { display: flex; gap: 2rem; margin-top: 2rem; }
+        .stat-item { text-align: center; }
+        .stat-number {
+            font-size: 2.5rem; font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-blue), var(--soft-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .stat-label { font-size: 0.9rem; color: #777; font-weight: 500; }
+        .products { background: linear-gradient(180deg, #ffffff 0%, #f0f4f8 100%); }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .product-card {
+            background: white; border-radius: 24px; overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); position: relative;
+        }
+        .product-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--soft-blue));
+            transform: scaleX(0); transition: transform 0.4s ease;
+        }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(26,115,232,0.15); }
+        .product-card:hover::before { transform: scaleX(1); }
+        .product-image { width: 100%; height: 250px; object-fit: cover; transition: transform 0.6s ease; }
+        .product-card:hover .product-image { transform: scale(1.1); }
+        .product-info { padding: 1.8rem; }
+        .product-tag {
+            display: inline-block; padding: 0.3rem 0.8rem; background: var(--light-blue);
+            color: var(--primary-blue); border-radius: 20px; font-size: 0.8rem;
+            font-weight: 600; margin-bottom: 0.8rem;
+        }
+        .product-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-dark); }
+        .product-desc { color: #666; font-size: 0.95rem; line-height: 1.6; }
+        .product-features { display: flex; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee; }
+        .product-feature { display: flex; align-items: center; gap: 0.3rem; font-size: 0.85rem; color: #777; }
+        .product-feature span { color: var(--primary-blue); }
+        .gallery { background: linear-gradient(180deg, #f0f4f8 0%, #ffffff 100%); }
+        .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 250px; gap: 1rem; }
+        .gallery-item { position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; transition: all 0.4s ease; }
+        .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+        .gallery-item:nth-child(4) { grid-column: span 2; }
+        .gallery-item:nth-child(5) { grid-row: span 2; }
+        .gallery-item:nth-child(7) { grid-column: span 2; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .gallery-item:hover img { transform: scale(1.15); }
+        .gallery-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(13,71,161,0.8), transparent);
+            display: flex; align-items: flex-end; padding: 1.5rem;
+            opacity: 0; transition: opacity 0.4s ease;
+        }
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+        .gallery-overlay-text { color: white; font-weight: 600; transform: translateY(20px); transition: transform 0.4s ease; }
+        .gallery-item:hover .gallery-overlay-text { transform: translateY(0); }
+        .lightbox {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.9); z-index: 2000;
+            align-items: center; justify-content: center; padding: 2rem;
+        }
+        .lightbox.active { display: flex; animation: fadeIn 0.3s ease; }
+        .lightbox img { max-width: 90%; max-height: 90vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        .lightbox-close {
+            position: absolute; top: 2rem; right: 2rem; color: white; font-size: 2.5rem;
+            cursor: pointer; width: 50px; height: 50px; display: flex; align-items: center;
+            justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+        .lightbox-close:hover { background: rgba(255,255,255,0.2); transform: rotate(90deg); }
+        .why-us { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 50%, #e8eaf6 100%); position: relative; overflow: hidden; }
+        .why-us::before {
+            content: ''; position: absolute; top: -50%; right: -20%;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(26,115,232,0.1), transparent); border-radius: 50%;
+        }
+        .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; position: relative; z-index: 1; }
+        .feature-card {
+            background: var(--glass-bg); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 24px;
+            padding: 2.5rem 2rem; text-align: center;
+            transition: all 0.4s ease; position: relative; overflow: hidden;
+        }
+        .feature-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 0;
+            background: linear-gradient(135deg, var(--primary-blue), var(--soft-blue));
+            transition: height 0.4s ease; z-index: 0;
+        }
+        .feature-card:hover::before { height: 100%; }
+        .feature-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(26,115,232,0.2); }
+        .feature-card:hover .feature-icon, .feature-card:hover .feature-title, .feature-card:hover .feature-desc { color: white; }
+        .feature-icon {
+            width: 70px; height: 70px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--soft-blue));
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.5rem; font-size: 1.8rem; color: white;
+            position: relative; z-index: 1; transition: all 0.4s ease;
+        }
+        .feature-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.8rem; color: var(--text-dark); position: relative; z-index: 1; transition: color 0.4s ease; }
+        .feature-desc { font-size: 0.95rem; color: #666; line-height: 1.6; position: relative; z-index: 1; transition: color 0.4s ease; }
+        .social { background: linear-gradient(180deg, #ffffff 0%, #f5f7fa 100%); text-align: center; }
+        .social-grid { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; margin-top: 3rem; }
+        .social-link {
+            width: 80px; height: 80px; border-radius: 24px; display: flex;
+            align-items: center; justify-content: center; font-size: 2rem;
+            text-decoration: none; color: white; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative; overflow: hidden;
+        }
+        .social-link::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, var(--primary-blue), var(--soft-blue));
+            opacity: 0.9; transition: opacity 0.3s ease;
+        }
+        .social-link:hover::before { opacity: 1; }
+        .social-link:hover { transform: translateY(-8px) scale(1.1); box-shadow: 0 15px 35px rgba(26,115,232,0.4); }
+        .social-link span { position: relative; z-index: 1; }
+        .social-link.facebook { background: #1877f2; }
+        .social-link.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .social-link.tiktok { background: #000000; }
+        .social-link.whatsapp { background: #25d366; }
+        .social-link.youtube { background: #ff0000; }
+        .social-label { margin-top: 0.8rem; font-size: 0.9rem; font-weight: 600; color: var(--text-dark); }
+        .social-item { display: flex; flex-direction: column; align-items: center; }
+        .contact {
+            background: linear-gradient(135deg, #0d47a1 0%, #1a73e8 50%, #42a5f5 100%);
+            color: white; position: relative; overflow: hidden;
+        }
+        .contact::before {
+            content: ''; position: absolute; top: -100px; right: -100px;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1), transparent); border-radius: 50%;
+        }
+        .contact::after {
+            content: ''; position: absolute; bottom: -150px; left: -150px;
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,0.08), transparent); border-radius: 50%;
+        }
+        .contact .section-title, .contact .section-subtitle { color: white; }
+        .contact .section-title::after { background: linear-gradient(90deg, white, rgba(255,255,255,0.5)); }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; position: relative; z-index: 1; }
+        .contact-info h3 { font-size: 1.8rem; margin-bottom: 1.5rem; }
+        .contact-item {
+            display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem;
+            padding: 1.2rem; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+            border-radius: 16px; border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s ease;
+        }
+        .contact-item:hover { background: rgba(255,255,255,0.15); transform: translateX(5px); }
+        .contact-icon {
+            width: 50px; height: 50px; background: rgba(255,255,255,0.2);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; flex-shrink: 0;
+        }
+        .contact-text h4 { font-size: 1.1rem; margin-bottom: 0.3rem; }
+        .contact-text p { opacity: 0.9; font-size: 0.95rem; }
+        .contact-form {
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 24px; padding: 2.5rem;
+        }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; font-size: 0.95rem; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 1rem 1.2rem;
+            border: 1px solid rgba(255,255,255,0.3); border-radius: 12px;
+            background: rgba(255,255,255,0.1); color: white; font-size: 1rem;
+            transition: all 0.3s ease; font-family: inherit;
+        }
+        .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.6); }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none; border-color: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.15); box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+        .form-group textarea { min-height: 120px; resize: vertical; }
+        .btn-submit {
+            width: 100%; padding: 1rem; background: white; color: var(--primary-blue);
+            border: none; border-radius: 12px; font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: all 0.4s ease;
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .footer {
+            background: var(--text-dark); color: rgba(255,255,255,0.7);
+            padding: 3rem 2rem 1.5rem; text-align: center;
+        }
+        .footer-content { max-width: 1200px; margin: 0 auto; }
+        .footer-logo { font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 1rem; }
+        .footer-tagline { font-size: 1rem; margin-bottom: 2rem; opacity: 0.8; }
+        .footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.3s ease; }
+        .footer-links a:hover { color: var(--soft-blue); }
+        .footer-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 2rem 0; }
+        .footer-copyright { font-size: 0.9rem; opacity: 0.6; }
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .reveal-left { opacity: 0; transform: translateX(-60px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal-left.active { opacity: 1; transform: translateX(0); }
+        .reveal-right { opacity: 0; transform: translateX(60px); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal-right.active { opacity: 1; transform: translateX(0); }
+        .reveal-scale { opacity: 0; transform: scale(0.8); transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal-scale.active { opacity: 1; transform: scale(1); }
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+        @media (max-width: 992px) {
+            .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+            .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+            .gallery-item:nth-child(4) { grid-column: span 1; }
+            .gallery-item:nth-child(5) { grid-row: span 1; }
+            .gallery-item:nth-child(7) { grid-column: span 1; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0;
+                background: rgba(255,255,255,0.98); flex-direction: column; padding: 1.5rem;
+                gap: 1rem; box-shadow: var(--shadow-soft); backdrop-filter: blur(20px);
+            }
+            .nav-links.active { display: flex; }
+            .mobile-menu-btn { display: block; }
+            .hero-title { font-size: 2.5rem; }
+            .gallery-grid { grid-template-columns: 1fr; grid-auto-rows: 200px; }
+            .gallery-item:nth-child(1) { grid-column: span 1; grid-row: span 1; }
+            .about-stats { justify-content: center; }
+            .features-grid { grid-template-columns: 1fr; }
+            section { padding: 4rem 1.5rem; }
+        }
+        @media (max-width: 480px) {
+            .hero-title { font-size: 2rem; }
+            .btn { padding: 0.8rem 1.8rem; font-size: 0.9rem; }
+            .social-link { width: 60px; height: 60px; font-size: 1.5rem; }
+        }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--primary-blue), var(--soft-blue)); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--deep-blue); }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo"><div class="logo-icon">𓁹</div>Modalii LensHub</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#why-us">Why Us</a></li>
+                <li><a href="#social">Social</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-particles" id="heroParticles"></div>
+        <div class="floating-lens" style="width:120px;height:120px;top:15%;left:10%;animation-duration:8s;"></div>
+        <div class="floating-lens" style="width:80px;height:80px;top:60%;left:80%;animation-duration:10s;animation-delay:1s;"></div>
+        <div class="floating-lens" style="width:150px;height:150px;top:70%;left:15%;animation-duration:12s;animation-delay:2s;"></div>
+        <div class="floating-lens" style="width:60px;height:60px;top:20%;left:75%;animation-duration:9s;animation-delay:3s;"></div>
+        <div class="floating-lens" style="width:100px;height:100px;top:40%;left:5%;animation-duration:11s;animation-delay:1.5s;"></div>
+        <div class="floating-lens" style="width:70px;height:70px;top:80%;left:60%;animation-duration:7s;animation-delay:0.5s;"></div>
+        <div class="hero-content">
+            <div class="hero-badge">"Style your vision. Elevate your look."</div>
+            <h1 class="hero-title">Modalii LensHub<br>(PVT) Ltd</h1>
+            <p class="hero-tagline">Bringing your Vision to Life...</p>
+            <div class="hero-cta">
+                <a href="#products" class="btn btn-primary">Explore Lenses</a>
+                <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+            </div>
+        </div>
+        <div class="scroll-indicator"><span></span></div>
+    </section>
+        <section>
+        <div class="product-card reveal delay-1">
+                    <div style="overflow:hidden;"><img src="pic/freshlook.jpg" alt="Daily Disposable" class="product-image"></div>
+                    <div class="product-info">
+                        <font size="5">
+                        <span class="product-tag" style="color:#0040E3;"><b>Product Brand</b></span></font>
+                        <h3 class="product-title" style="text-align: center; color: #0040E3;" ><font size="5"><u>FreshLook</u></font></h3>
+                        <p class="product-desc"><font color="#0040E3"><b>FreshLook</b></font> is a popular <b>USA</b> cosmetic contact lens brand known for its vibrant color range and natural-looking designs. It offers comfortable,
+                             high-quality lenses that enhance or change eye color while maintaining clear vision and all-day wear comfort.</p>
+                        <div class="product-features"><div class="product-feature"><span>✔</span> Premium Quality</div><div class="product-feature"><span>✔</span> Freshlook Brand USA Product</div><div class="product-feature"><span>✔</span>1 Year Reuseable</div></div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">About Us</span>
+                <h2 class="section-title">Who We Are</h2>
+                <p class="section-subtitle">Dedicated to providing the finest & premium quality contact lens solutions with a focus on comfort, clarity, and upgrade your style.</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-image reveal-left">
+                    <img src="pic/2.jpg?w=600&h=500&fit=crop" alt="Eye Care Professional" class="about-image-main">
+                </div>
+                <div class="about-content reveal-right">
+                    <h3>Our Vision,Our Passion</h3>
+                    <p>At Modalii LensHub (PVT) Ltd, we believe your eyes deserve the perfect blend of beauty, comfort, and confidence. Our Freshlook Contact Lenses are designed to enhance your natural look while providing exceptional comfort for everyday wear.</p>
+                    <p>We proudly offer <b>100% original</b> imported <b>Freshlook</b> Fashion Contact Lenses that are reusable for up to 1 year with proper care. Available in a wide range of stunning colors, our lenses help you express your unique style-whether you prefer a subtle enhancement or a bold transformation.</p>
+                    <p>Your safety and satisfaction are our top priorities. Every pair is carefully selected to ensure premium quality, lasting comfort, and reliable performance.</p>
+                    <p><b>Modalii LensHub (PVT) Ltd - Bringing your Vision to Life.</b></p>
+                    <div class="about-stats">
+                        <div class="stat-item reveal delay-1"><div class="stat-number">57K+</div><div class="stat-label">Followers</div></div>
+                        <div class="stat-item reveal delay-2"><div class="stat-number">12+</div><div class="stat-label">Lens Varieties</div></div>
+                        <div class="stat-item reveal delay-3"><div class="stat-number">2 +</div><div class="stat-label">Years Experience</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="products" id="products">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Our Collection</span>
+                <h2 class="section-title">Premium Lens Collection</h2>
+                <p class="section-subtitle">Discover our carefully curated range of contact lenses designed for every lifestyle and preference.</p>
+            </div>
+            <div class="products-grid">
+                <div class="product-card reveal delay-1">
+                    <div style="overflow:hidden;"><img src="item/pack1.png?w=400&h=250&fit=crop" alt="Daily Disposable" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title">Toolkit,Lens pair & Solution bottle</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.2990.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-1">
+                    <div style="overflow:hidden;"><img src="item/pack2.png?w=400&h=250&fit=crop" alt="Daily Disposable" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title">Toolkit<br> & Lens pair</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1990.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-1">
+                    <div style="overflow:hidden;"><img src="item/pack3.png?w=400&h=250&fit=crop" alt="Daily Disposable" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;s">In Stock</span>
+                        <h3 class="product-title">Solution Bottle <br>(120ml)</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1000.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-1">
+                    <div style="overflow:hidden;"><img src="item/amethyst.jpg?w=400&h=250&fit=crop" alt="Daily Disposable" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title" style="color:#71318d;">Amethyst</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1500.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-2">
+                    <div style="overflow:hidden;"><img src="item/blue.jpg?w=400&h=250&fit=crop" alt="Monthly Lenses" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title" style="color: blue;">Blue</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1500.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-3">
+                    <div style="overflow:hidden;"><img src="item/brilliant blue.jpg?w=400&h=250&fit=crop" alt="Colored Lenses" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title" style="color: #4e79fa;">Brilliant Blue</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1500.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-1">
+                    <div style="overflow:hidden;"><img src="item/brown.jpg?w=400&h=250&fit=crop" alt="Toric Lenses" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title" style="color: #964B00;">Brown</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1500.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-2">
+                    <div style="overflow:hidden;"><img src="item/gemstonegreen.jpg?w=400&h=250&fit=crop" alt="Multifocal Lenses" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title" style="color: #68c900;">Gemstone Green</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1500.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-3">
+                    <div style="overflow:hidden;"><img src="item/gray.jpg?w=400&h=250&fit=crop" alt="Silicone Hydrogel" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title" style="color: gray;">Gray</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1500.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-3">
+                    <div style="overflow:hidden;"><img src="item/green.jpg?w=400&h=250&fit=crop" alt="Silicone Hydrogel" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title" style="color: green;">Green</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1500.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-3">
+                    <div style="overflow:hidden;"><img src="item/honey.jpg?w=400&h=250&fit=crop" alt="Silicone Hydrogel" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title" style="color: #E0A761;">Honey</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1500.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-3">
+                    <div style="overflow:hidden;"><img src="item/purehazel.jpg?w=400&h=250&fit=crop" alt="Silicone Hydrogel" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title" style="color: #8E7618;">Purehazels</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1500.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-3">
+                    <div style="overflow:hidden;"><img src="item/sterlinggray.jpg?w=400&h=250&fit=crop" alt="Silicone Hydrogel" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title" style="color: #9c9c9c;">Sterling Gray</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1500.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-3">
+                    <div style="overflow:hidden;"><img src="item/truesapphire.jpg?w=400&h=250&fit=crop" alt="Silicone Hydrogel" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title" style="color: #0F52BA;">Truesapphire</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1500.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+                <div class="product-card reveal delay-3">
+                    <div style="overflow:hidden;"><img src="item/turquoise.jpg?w=400&h=250&fit=crop" alt="Silicone Hydrogel" class="product-image"></div>
+                    <div class="product-info">
+                        <span class="product-tag" style="color: #25d366;">In Stock</span>
+                        <h3 class="product-title" style="color: turquoise;">Turquoise</h3>
+                        <p class="product-desc">
+                            <ul type="star">
+                                <li>100% Original Imported</li>
+                                <li>1-Year Reusable</li>
+                                <li>Comfortable Daily Wear</li>
+                                <li>Stunning Natural & Vibrant colors</li>
+                                <li>Trusted Quality & Customer Care</li>
+                            </ul>
+                        </p>
+                        <h3><div class="product-features"><div class="product-feature"><span>✓</span> Rs.1500.00</div><div class="product-feature"><span></span></div></div></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Happy Customers</span>
+                <h2 class="section-title">Customer Moments</h2>
+                <p class="section-subtitle">Real people, real smiles, real confidence with Modalii lenses.</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item reveal delay-1" onclick="openLightbox(this)">
+                    <img src="item/all.jpg?w=600&h=600&fit=crop" alt="Customer 1">
+                    <div class="gallery-overlay"><span class="gallery-overlay-text">Lens Color Chart</span></div>
+                </div>
+                <div class="gallery-item reveal delay-2" onclick="openLightbox(this)">
+                    <img src="pic/a.jpg?w=300&h=300&fit=crop" alt="Customer 2">
+                    <div class="gallery-overlay"><span class="gallery-overlay-text">Confidence in Every Blink</span></div>
+                </div>
+                <div class="gallery-item reveal delay-3" onclick="openLightbox(this)">
+                    <img src="pic/b.jpg?w=300&h=300&fit=crop" alt="Customer 3">
+                    <div class="gallery-overlay"><span class="gallery-overlay-text">Crystal Clear Vision</span></div>
+                </div>
+                <div class="gallery-item reveal delay-1" onclick="openLightbox(this)">
+                    <img src="pic/g.jpg?w=600&h=300&fit=crop" alt="Customer 4">
+                    <div class="gallery-overlay"><span class="gallery-overlay-text">Style Meets Comfort</span></div>
+                </div>
+                <div class="gallery-item reveal delay-2" onclick="openLightbox(this)">
+                    <img src="pic/d.jpg?w=300&h=600&fit=crop" alt="Customer 5">
+                    <div class="gallery-overlay"><span class="gallery-overlay-text">Everyday Elegance</span></div>
+                </div>
+                <div class="gallery-item reveal delay-3" onclick="openLightbox(this)">
+                    <img src="pic/c.jpg?w=300&h=300&fit=crop" alt="Customer 6">
+                    <div class="gallery-overlay"><span class="gallery-overlay-text">Sharp Focus Always</span></div>
+                </div>
+                <div class="gallery-item reveal delay-1" onclick="openLightbox(this)">
+                    <img src="pic/k.jpg?w=600&h=300&fit=crop" alt="Customer 7">
+                    <div class="gallery-overlay"><span class="gallery-overlay-text">Radiant & Clear</span></div>
+                </div>
+                <div class="gallery-item reveal delay-2" onclick="openLightbox(this)">
+                    <img src="pic/j.jpg?w=300&h=300&fit=crop" alt="Customer 8">
+                    <div class="gallery-overlay"><span class="gallery-overlay-text">Natural Beauty Enhanced</span></div>
+                </div>
+                <div class="gallery-item reveal delay-2" onclick="openLightbox(this)">
+                    <img src="pic/h.jpg?w=300&h=300&fit=crop" alt="Customer 8">
+                    <div class="gallery-overlay"><span class="gallery-overlay-text">See the World Better</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <div class="lightbox-close">&times;</div>
+        <img src="" alt="Lightbox Image" id="lightboxImg">
+    </div>
+
+    <section class="why-us" id="why-us">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Our Promise</span>
+                <h2 class="section-title">Why Choose Us</h2>
+                <p class="section-subtitle">We go beyond selling lenses — we deliver trust, quality, care and stylish look for your eyes.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card reveal delay-1">
+                    <div class="feature-icon">🏆</div>
+                    <h3 class="feature-title">High-Quality Lenses</h3>
+                    <p class="feature-desc">Freshlook USA Branded Contact Lenses.Every lens is crafted with precision using advanced materials and cutting-edge technology for unmatched optical clarity and durability.</p>
+                </div>
+                <div class="feature-card reveal delay-2">
+                    <div class="feature-icon">✅️</div>
+                    <h3 class="feature-title">Trusted Brand</h3>
+                    <p class="feature-desc">Modalii Lens Hub is a name thousands trust. Our reputation is built on consistent quality and genuine customer satisfaction.</p>
+                </div>
+                <div class="feature-card reveal delay-3">
+                    <div class="feature-icon">👁️</div>
+                    <h3 class="feature-title">Safe for Eyes</h3>
+                    <p class="feature-desc">All our lenses are tested. Your eye health is our top priority with every product we offer.</p>
+                </div>
+                <div class="feature-card reveal delay-4">
+                    <div class="feature-icon">$</div>
+                    <h3 class="feature-title">Affordable Quality</h3>
+                    <p class="feature-desc">Enjoy the perfect balance of quality and affordability with our premium contact lenses, carefully selected to deliver outstanding comfort, safety, and value.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="social" id="social">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Connect With Us</span>
+                <h2 class="section-title">Follow Our Journey</h2>
+                <p class="section-subtitle">Stay updated with the latest lens trends, eye care tips, and exclusive behind-the-scenes content.</p>
+            </div>
+            <div class="social-grid">
+                <div class="social-item reveal delay-1">
+                    <a href="https://www.facebook.com/share/1CGEwFAKSN/?mibextid=wwXIfr" target="_blank" class="social-link facebook"><span>ⓕ</span></a>
+                    <div class="social-label">Facebook</div>
+                </div>
+                <div class="social-item reveal delay-2">
+                    <a href="https://www.instagram.com/modaliilenshub?igsh=azBjY2NxMm1qbHRq" target="_blank" class="social-link instagram"><span>📷</span></a>
+                    <div class="social-label">Instagram</div>
+                </div>
+                <div class="social-item reveal delay-3">
+                    <a href="https://www.tiktok.com/@lenshub3?_r=1&_t=ZS-97amm0zhIY5" target="_blank" class="social-link tiktok"><span>♪</span></a>
+                    <div class="social-label">TikTok</div>
+                </div>
+                <div class="social-item reveal delay-4">
+                    <a href="https://wa.me/+94713870700" target="_blank" class="social-link whatsapp"><span>💬</span></a>
+                    <div class="social-label">WhatsApp</div>
+                </div>
+                <div class="social-item reveal delay-5">
+                    <a href="https://maps.app.goo.gl/ZU7QG61mb7at56qv7" target="_blank" class="social-link youtube"><span> ⟟ </span></a>
+                    <div class="social-label">Location</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label" style="background:rgba(255,255,255,0.2);color:white;">Get in Touch</span>
+                <h2 class="section-title">Contact Us</h2>
+                <p class="section-subtitle">Have questions? We'd love to hear from you. Reach out and our team will respond promptly.</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info reveal-left">
+                    <h3>Let's Connect</h3>
+                    <div class="contact-item">
+                        <div class="contact-icon">@</div>
+                        <div class="contact-text"><h4>Email Us</h4><p>info@modaliilenshub.com</p></div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">☎</div>
+                        <div class="contact-text"><h4>Call Us</h4><p style="color: white;">+94 71 387 0700</p></div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">🏠︎</div>
+                        <div class="contact-text"><h4>Visit Us</h4><p>Horahena road, Kottawa, Sri Lanka, 10230</p></div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">🕐</div>
+                        <div class="contact-text"><h4>Business Hours</h4><p>Always Open</p></div>
+                    </div>
+                </div>
+                    </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">👁 Modalii Lens Hub (PVT) Ltd</div>
+            <p class="footer-tagline">Your trusted contact lens destination...</p>
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#products">Products</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-divider"></div>
+            <p class="footer-copyright">© 2026 Modalii Lens Hub (PVT) Ltd. All rights reserved. | Designed by Lalitha Chathuranga.</p>
+        </div>
+    </footer>
+
+    <script>
+        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.pageYOffset > 50);
+        });
+
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
+        });
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => { navLinks.classList.remove('active'); mobileMenuBtn.textContent = '☰'; });
+        });
+
+        function createParticles() {
+            const container = document.getElementById('heroParticles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 8 + 4;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        function openLightbox(element) {
+            const img = element.querySelector('img');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightboxImg');
+            lightboxImg.src = img.src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+    </script>
+</body>
+</html>
